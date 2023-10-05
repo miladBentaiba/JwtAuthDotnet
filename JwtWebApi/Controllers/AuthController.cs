@@ -55,8 +55,8 @@ namespace JwtWebApi.Controllers
                 new Claim(ClaimTypes.Name, user.Username)
             };
 
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSettings:Token").Value));
+            var keyJson = _configuration.GetSection("AppSettings:Token").Value;
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(keyJson));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
@@ -66,6 +66,7 @@ namespace JwtWebApi.Controllers
                 signingCredentials: creds);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
             return jwt;
         }
 
